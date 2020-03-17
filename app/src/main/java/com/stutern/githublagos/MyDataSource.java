@@ -7,9 +7,10 @@ import androidx.paging.PageKeyedDataSource;
 import com.stutern.githublagos.model.GitHubUser;
 import com.stutern.githublagos.utils.NetworkState;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class MyDataSource extends PageKeyedDataSource<Integer, GitHubUser> {
@@ -31,24 +32,25 @@ public class MyDataSource extends PageKeyedDataSource<Integer, GitHubUser> {
         initialLoading.postValue(NetworkState.LOADING);
         networkState.postValue(NetworkState.LOADING);
         mApi.getUsers(LOCATION_QUERY_PARAMETER, FIRST_PAGE)
-                .enqueue(new Callback<GitHubUser.GitHubResponse>() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<GitHubUser.GitHubResponse>() {
                     @Override
-                    public void onResponse(Call<GitHubUser.GitHubResponse> call, Response<GitHubUser.GitHubResponse> response) {
-                        if (response.isSuccessful() && response.code() == 200) {
-                            initialLoading.postValue(NetworkState.LOADED);
-                            networkState.postValue(NetworkState.LOADED);
-                            callback.onResult(response.body().items, null, FIRST_PAGE + 1);
-                        }
-                        else {
-                            initialLoading.postValue(new NetworkState(NetworkState.State.FAILED, response.message()));
-                            networkState.postValue(new NetworkState(NetworkState.State.FAILED, response.message()));
-                        }
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override
-                    public void onFailure(Call<GitHubUser.GitHubResponse> call, Throwable t) {
+                    public void onSuccess(GitHubUser.GitHubResponse gitHubResponse) {
+                        initialLoading.postValue(NetworkState.LOADED);
+                        networkState.postValue(NetworkState.LOADED);
+                        callback.onResult(gitHubResponse.items, null, FIRST_PAGE + 1);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
                         String errorMessage;
-                        errorMessage = t.getMessage() == null ? "unknown error" : t.getMessage();
+                        errorMessage = e.getMessage() == null ? "unknown error" : e.getMessage();
 
                         initialLoading.postValue(new NetworkState(NetworkState.State.FAILED, errorMessage));
                         networkState.postValue(new NetworkState(NetworkState.State.FAILED, errorMessage));
@@ -65,22 +67,24 @@ public class MyDataSource extends PageKeyedDataSource<Integer, GitHubUser> {
     public void loadAfter(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, GitHubUser> callback) {
         networkState.postValue(NetworkState.LOADING);
         mApi.getUsers(LOCATION_QUERY_PARAMETER, params.key)
-                .enqueue(new Callback<GitHubUser.GitHubResponse>() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<GitHubUser.GitHubResponse>() {
                     @Override
-                    public void onResponse(Call<GitHubUser.GitHubResponse> call, Response<GitHubUser.GitHubResponse> response) {
-                        if (response.isSuccessful() && response.code() == 200) {
-                            networkState.postValue(NetworkState.LOADED);
-                            callback.onResult(response.body().items, params.key + 1);
-                        }
-                        else {
-                            networkState.postValue(new NetworkState(NetworkState.State.FAILED, response.message()));
-                        }
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override
-                    public void onFailure(Call<GitHubUser.GitHubResponse> call, Throwable t) {
+                    public void onSuccess(GitHubUser.GitHubResponse gitHubResponse) {
+                        networkState.postValue(NetworkState.LOADED);
+                        callback.onResult(gitHubResponse.items, params.key + 1);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
                         String errorMessage;
-                        errorMessage = t.getMessage() == null ? "unknown message" : t.getMessage();
+                        errorMessage = e.getMessage() == null ? "unknown message" : e.getMessage();
 
                         networkState.postValue(new NetworkState(NetworkState.State.FAILED, errorMessage));
                     }
