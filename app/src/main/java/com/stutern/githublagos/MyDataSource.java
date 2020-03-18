@@ -56,6 +56,7 @@ public class MyDataSource extends PageKeyedDataSource<Integer, GitHubUser> {
                         networkState.postValue(new NetworkState(NetworkState.State.FAILED, errorMessage));
                     }
                 });
+
     }
 
     @Override

@@ -4,6 +4,17 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="45dp">
+
+    <ProgressBar
+        android:id="@+id/progressBar_network_details"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView_userName_details"
+        app:layout_constraintBottom_toTopOf="@id/textView_repo_link"
+        android:visibility="visible"
+        android:elevation="27dp"/>
     
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView_userImage_details"
@@ -20,13 +31,80 @@
         android:id="@+id/textView_userName_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_userImage_details"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="@id/imageView_userImage_details"
         app:layout_constraintEnd_toEndOf="@id/imageView_userImage_details"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_userImage_details"
         android:textSize="22sp"
         android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/textView_userBio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="@+id/imageView_userImage_details"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_userImage_details"
+        app:layout_constraintTop_toBottomOf="@+id/textView_userName_details"
+        app:layout_constraintBottom_toTopOf="@+id/divider_top"
+        android:textSize="18sp"
+        android:textStyle="italic"/>
+
+    <View
+        android:id="@+id/divider_top"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_following"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_userImage_details"
+        app:layout_constraintStart_toStartOf="@+id/imageView_userImage_details"
+        app:layout_constraintTop_toBottomOf="@+id/textView_userBio"/>
+
+    <TextView
+        android:id="@+id/textView_following"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="@+id/imageView_userImage_details"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@+id/divider_top"
+        app:layout_constraintBottom_toTopOf="@+id/divider_bottom"/>
+
+    <View
+        android:id="@+id/vertical_divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/divider_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/textView_followers"
+        app:layout_constraintStart_toEndOf="@+id/textView_following"
+        app:layout_constraintTop_toBottomOf="@+id/divider_top"/>
+
+    <TextView
+        android:id="@+id/textView_followers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toEndOf="@+id/vertical_divider"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_userImage_details"
+        app:layout_constraintTop_toBottomOf="@+id/divider_top"
+        app:layout_constraintBottom_toTopOf="@id/divider_bottom"/>
+
+    <View
+        android:id="@+id/divider_bottom"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/textView_repo_link"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_userImage_details"
+        app:layout_constraintStart_toStartOf="@+id/imageView_userImage_details"
+        app:layout_constraintTop_toBottomOf="@+id/textView_following"/>
+
 
     <TextView
         android:id="@+id/textView_repo_link"
@@ -34,7 +112,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/imageView_userImage_details"
         app:layout_constraintEnd_toEndOf="@id/imageView_userImage_details"
-        app:layout_constraintTop_toBottomOf="@+id/textView_userName_details"
+        app:layout_constraintTop_toBottomOf="@+id/divider_bottom"
         android:layout_marginTop="12dp"
         android:clickable="true"
         android:focusable="true"
@@ -43,6 +121,12 @@
         android:textSize="17sp"
         android:text="@string/check_out_on_github"
         android:gravity="center"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/dividers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="divider_bottom, divider_top, vertical_divider"/>
 
 
 

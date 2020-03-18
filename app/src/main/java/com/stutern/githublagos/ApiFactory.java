@@ -11,7 +11,7 @@ public class ApiFactory {
     public Api getApi() {
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/search/")
+                .baseUrl("https://api.github.com/")
                 .client(getClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

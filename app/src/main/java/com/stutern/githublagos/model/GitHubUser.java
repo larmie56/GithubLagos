@@ -17,13 +17,14 @@ public class GitHubUser implements Parcelable {
 
     public static final String TAG = GitHubUser.class.getSimpleName();
 
+
         @SerializedName("login")
         private String login;
         @SerializedName("id")
         private Integer id;
         @SerializedName("avatar_url")
         private String avatarUrl;
-        @SerializedName("blog")
+        @SerializedName("followers")
         private int followers;
         @SerializedName("following")
         private int following;
